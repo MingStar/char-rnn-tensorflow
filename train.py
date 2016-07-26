@@ -110,13 +110,12 @@ def train(args):
                 train_loss, state, _ = sess.run([model.cost, model.final_state, model.train_op], feed)
                 end = time.time()
                 steps_so_far = e * data_loader.num_batches + b
-                print("{}/{} (epoch {}), train_loss = {:.3f}, time/batch = {:.3f}" \
-                    .format(data_loader.num_batches + b, total_steps,
-                            e, train_loss, end - start))
-                if steps_so_far % args.save_every == 0\
+                print("{}/{} (epoch {}), train_loss = {:.4f}, time/batch = {:.3f}" \
+                    .format(steps_so_far, total_steps, e, train_loss, end - start))
+                if (steps_so_far != 0 and steps_so_far % args.save_every == 0)\
                     or (e==args.num_epochs-1 and b == data_loader.num_batches-1): # save for the last result
                     checkpoint_path = os.path.join(args.save_dir, 'model.ckpt')
-                    path = saver.save(sess, checkpoint_path, global_step = e * data_loader.num_batches + b)
+                    path = saver.save(sess, checkpoint_path, global_step = steps_so_far)
                     print("model saved to {}".format(path))
                     best_model_saver.keep_best(path, train_loss, steps_so_far, total_steps)
 
