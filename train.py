@@ -50,6 +50,8 @@ def main():
                         help="filename for the pre-train gensim word2vec model")
     parser.add_argument('--dropout_keep_prob', type=float, default=1.0,
                         help='probability of keeping weights in the dropout layer')
+    parser.add_argument('--print_every', type=int, default=10,
+                        help='print stats of training every n steps')
     args = parser.parse_args()
     train(args)
 
@@ -110,8 +112,9 @@ def train(args):
                 train_loss, state, _ = sess.run([model.cost, model.final_state, model.train_op], feed)
                 end = time.time()
                 steps_so_far = e * data_loader.num_batches + b
-                print("{}/{} (epoch {}), train_loss = {:.4f}, time/batch = {:.3f}" \
-                    .format(steps_so_far, total_steps, e, train_loss, end - start))
+                if steps_so_far % args.print_every == 0:
+                    print("{}/{} (epoch {}), train_loss = {:.4f}, time/batch = {:.3f}" \
+                        .format(steps_so_far, total_steps, e, train_loss, end - start))
                 if (steps_so_far != 0 and steps_so_far % args.save_every == 0)\
                     or (e==args.num_epochs-1 and b == data_loader.num_batches-1): # save for the last result
                     checkpoint_path = os.path.join(args.save_dir, 'model.ckpt')
