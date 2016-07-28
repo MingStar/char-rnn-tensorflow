@@ -14,11 +14,12 @@
 - python libraries:
     - [PyYAML](http://pyyaml.org/)
     - [CherryPy](http://www.cherrypy.org/)
+    - [Gensim](https://radimrehurek.com/gensim/)
 
 Installation for python libraries:
 
 ```
-pip install pyyaml cherrypy
+pip install pyyaml cherrypy gensim
 ```
 
 ## Sampling with the web server
