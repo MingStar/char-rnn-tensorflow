@@ -18,7 +18,7 @@ def main():
                        help='directory to store checkpointed models')
     parser.add_argument('--rnn_size', type=int, default=128,
                        help='size of RNN hidden state')
-    parser.add_argument('--num_layers', type=int, default=2,
+    parser.add_argument('--num_layers', type=int, default=3,
                        help='number of layers in the RNN')
     parser.add_argument('--model', type=str, default='lstm',
                        help='rnn, gru, or lstm')
@@ -46,8 +46,8 @@ def main():
                         """)
     parser.add_argument('--word2vec_embedding', type=str, default=None,
                         help="filename for the pre-train gensim word2vec model")
-    parser.add_argument('--dropout_keep_prob', type=float, default=1.0,
-                        help='probability of keeping weights in the dropout layer')
+    parser.add_argument('--dropout', type=float, default=0,
+                        help="probability of dropouts for each cell's output")
     parser.add_argument('--print_every', type=int, default=10,
                         help='print stats of training every n steps')
     args = parser.parse_args()

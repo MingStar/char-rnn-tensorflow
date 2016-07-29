@@ -22,8 +22,8 @@ class Model():
             raise Exception("model type not supported: {}".format(args.model))
 
         cell = cell_fn(args.rnn_size)
-        if training and args.dropout_keep_prob < 1:
-            cell = rnn_cell.DropoutWrapper(cell, output_keep_prob=args.dropout_keep_prob)
+        if training and args.dropout > 0:
+            cell = rnn_cell.DropoutWrapper(cell, output_keep_prob=1.0-args.dropout)
 
         self.cell = cell = rnn_cell.MultiRNNCell([cell] * args.num_layers)
 
@@ -37,8 +37,8 @@ class Model():
             with tf.device("/cpu:0"):
                 self.embedding = tf.get_variable("embedding", [args.vocab_size, args.rnn_size])
                 inputs = tf.nn.embedding_lookup(self.embedding, self.input_data)
-                if training and args.dropout_keep_prob < 1:
-                    inputs = tf.nn.dropout(inputs, args.dropout_keep_prob)
+                if training and args.dropout > 0:
+                    inputs = tf.nn.dropout(inputs, args.dropout)
                 inputs = tf.split(1, args.seq_length, inputs)
                 inputs = [tf.squeeze(input_, [1]) for input_ in inputs]
 
