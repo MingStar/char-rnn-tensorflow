@@ -1,6 +1,4 @@
 from __future__ import print_function
-import gensim
-import numpy as np
 import tensorflow as tf
 
 import argparse
@@ -94,6 +92,7 @@ def train(args):
     with tf.Session() as sess:
         tf.initialize_all_variables().run()
         if args.word2vec_embedding:
+            import gensim
             word2vec = gensim.models.Word2Vec.load(args.word2vec_embedding)
             sess.run(tf.assign(model.embedding, word2vec.syn0))
         saver = tf.train.Saver(tf.all_variables())
