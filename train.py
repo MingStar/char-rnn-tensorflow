@@ -50,11 +50,13 @@ def main():
                         help="probability of dropouts for each cell's output")
     parser.add_argument('--print_every', type=int, default=10,
                         help='print stats of training every n steps')
+    parser.add_argument('--word_level', action='store_true',
+                        help='if specified, separate text on word level, otherwise, on char level')
     args = parser.parse_args()
     train(args)
 
 def train(args):
-    data_loader = TextLoader(args.data_dir, args.batch_size, args.seq_length)
+    data_loader = TextLoader(args.data_dir, args.batch_size, args.seq_length, word_level=args.word_level)
     args.vocab_size = data_loader.vocab_size
     
     # check compatibility if training is continued from previously saved model

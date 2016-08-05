@@ -1,3 +1,4 @@
+from __future__ import print_function
 import codecs
 import os
 import collections
@@ -5,7 +6,7 @@ from six.moves import cPickle
 import numpy as np
 
 class TextLoader():
-    def __init__(self, data_dir, batch_size, seq_length, encoding='utf-8'):
+    def __init__(self, data_dir, batch_size, seq_length, word_level=False, encoding='utf-8'):
         self.data_dir = data_dir
         self.batch_size = batch_size
         self.seq_length = seq_length
@@ -17,17 +18,21 @@ class TextLoader():
 
         if not (os.path.exists(vocab_file) and os.path.exists(tensor_file)):
             print("reading text file")
-            self.preprocess(input_file, vocab_file, tensor_file)
+            self.preprocess(input_file, vocab_file, tensor_file, word_level)
         else:
             print("loading preprocessed files")
             self.load_preprocessed(vocab_file, tensor_file)
         self.create_batches()
         self.reset_batch_pointer()
 
-    def preprocess(self, input_file, vocab_file, tensor_file):
+    def preprocess(self, input_file, vocab_file, tensor_file, word_level):
         with codecs.open(input_file, "r", encoding=self.encoding) as f:
             data = f.read()
+        if word_level:
+            data = data.split()
         counter = collections.Counter(data)
+        print("#Unique tokens: " + str(len(counter)))
+        print("Top 10 tokens: " + str(counter.most_common(10)))
         count_pairs = sorted(counter.items(), key=lambda x: -x[1])
         self.chars, _ = zip(*count_pairs)
         self.vocab_size = len(self.chars)
