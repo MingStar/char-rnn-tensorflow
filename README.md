@@ -2,9 +2,10 @@
 
 # New changes in this repo:
 
+- Allow word-level tokens (with option flag `--word-level` when running train.py)
 - Save the best model (i.e. minimum training loss) so far in the 'best' subfolder
 - Options for using gensim word2vec embedding
-- Add a web server for sampling
+- Add a web server for sampling (with CherryPy, see sample_sever.py)
 - Temperature [Pull request #28](https://github.com/sherjilozair/char-rnn-tensorflow/pull/28)
 - Dropouts [Pull request #35](https://github.com/sherjilozair/char-rnn-tensorflow/pull/35)
 
@@ -15,11 +16,12 @@
     - [PyYAML](http://pyyaml.org/)
     - [CherryPy](http://www.cherrypy.org/)
     - [Gensim](https://radimrehurek.com/gensim/)
+    - [nltk](http://www.nltk.org/)
 
 Installation for python libraries:
 
 ```
-pip install pyyaml cherrypy gensim
+pip install pyyaml cherrypy nltk gensim
 ```
 
 ## Sampling with the web server
