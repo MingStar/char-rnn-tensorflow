@@ -42,11 +42,7 @@ def sample(args):
         ckpt = tf.train.get_checkpoint_state(args.save_dir)
         if ckpt and ckpt.model_checkpoint_path:
             saver.restore(sess, ckpt.model_checkpoint_path)
-            if args.word_level:
-                prime = args.prime.split()
-            else:
-                prime = args.prime
-            print(model.sample(sess, chars, vocab, args.n, prime, args.sample, args.temperature, args.word_level))
+            print(model.sample(sess, chars, vocab, args.n, args.prime, args.sample, args.temperature, args.word_level))
 
 if __name__ == '__main__':
     main()

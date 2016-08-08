@@ -15,19 +15,22 @@ def main():
                        help='port the server runs on')
     parser.add_argument('--production', action="store_true",
                         help="specify whether the server runs in production environment or not")
-    parser.add_argument('--model_dir', type=str, default='save',
+    parser.add_argument('--save_dir', type=str, default='save',
                        help='directory to restore checkpointed models')
+    parser.add_argument('--word_level', action='store_true',
+                        help='if specified, separate text on word level, otherwise, on char level')
     args = parser.parse_args()
     server_config = {'server.socket_port': args.port}
     if args.production:
         server_config['environment'] = 'production'
     cherrypy.config.update(server_config)
-    cherrypy.quickstart(SampleServer(args.model_dir))
+    cherrypy.quickstart(SampleServer(args))
 
 
 class SampleServer(object):
-    def __init__(self, model_dir):
-        self.model_dir = model_dir
+    def __init__(self, args):
+        self.args = args
+        self.model_dir = args.save_dir
         self.lock = threading.Lock()
         self.threaded_models = {}
         self._load()
@@ -59,10 +62,10 @@ class SampleServer(object):
         return self.threaded_models[tid]
 
     @cherrypy.expose
-    def index(self, prime='The ', n=200, sample_mode=2):
+    def index(self, prime='The ', n=200, sample_mode=1):
         model, session = self._get_model_for_current_thread()
         with session.as_default():
-            return model.sample(session, self.chars, self.vocab, n, prime, sample_mode)
+            return model.sample(session, self.chars, self.vocab, n, prime, sample_mode, 0.8, self.args.word_level)
 
 
 if __name__ == '__main__':

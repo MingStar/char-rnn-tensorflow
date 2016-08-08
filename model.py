@@ -66,6 +66,8 @@ class Model():
             self.train_op = optimizer.apply_gradients(zip(grads, tvars))
 
     def sample(self, sess, chars, vocab, num=200, prime='The ', sampling_type=1, temperature=1., word_level=False):
+        if word_level:
+            prime = prime.split()
         state = self.cell.zero_state(1, tf.float32).eval()
         for char in prime[:-1]:
             x = np.zeros((1, 1))
