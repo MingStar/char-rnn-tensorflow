@@ -9,7 +9,7 @@ Originally written by [Sherjil Ozair](https://github.com/sherjilozair/char-rnn-t
 
 - [Tensorflow](http://www.tensorflow.org)
 - Other Python libraries:
-    - [Gensim](https://radimrehurek.com/gensim/) for optionally use a word2vec embedding
+    - [Gensim](https://radimrehurek.com/gensim/) for optionally using a [word2vec](https://radimrehurek.com/gensim/models/word2vec.html) embedding
     - [PyYAML](http://pyyaml.org/) for storing human readable model info
     - [CherryPy](http://www.cherrypy.org/) for running a simple sampling web service
 
@@ -96,7 +96,7 @@ There are 2 sampling methods:
 * one-off sampling from command line
 * multiple sampling as a web service
 
-### Command line:
+### Sampling using command line:
 
 Main Command: `$ python sample.py`
 
