@@ -4,16 +4,6 @@ Multi-layer Recurrent Neural Networks (LSTM, RNN) for character-level and word-l
 
 Originally written by [Sherjil Ozair](https://github.com/sherjilozair/char-rnn-tensorflow), inspired from Andrej Karpathy's [char-rnn](https://github.com/karpathy/char-rnn).
 
-### Improvements made in this repo:
-
-1. Allow word-level tokens, seperated by spaces (enable by using the argument flag `--word-level` when running train.py)
-1. Save the best model (in terms of minimum training loss) so far in the 'best' subfolder
-1. Options to use gensim word2vec embedding
-1. Add a web server for sampling (with CherryPy, see sample_sever.py)
-1. Temperature [Pull request #28](https://github.com/sherjilozair/char-rnn-tensorflow/pull/28)
-1. Dropouts [Pull request #35](https://github.com/sherjilozair/char-rnn-tensorflow/pull/35)
-
-
 ## Prerequisites:
 
 
@@ -21,26 +11,26 @@ Originally written by [Sherjil Ozair](https://github.com/sherjilozair/char-rnn-t
 - Other Python libraries:
     - [Gensim](https://radimrehurek.com/gensim/) for optionally use a word2vec embedding
     - [PyYAML](http://pyyaml.org/) for storing human readable model info
-    - [CherryPy](http://www.cherrypy.org/) for running a simple sampling server
+    - [CherryPy](http://www.cherrypy.org/) for running a simple sampling web service
 
 #### PIP Installation for Python libraries:
 
 ```
-pip install pyyaml cherrypy gensim
+$ pip install pyyaml cherrypy gensim
 ```
-
-
 
 ## Training
 
+Main Command: `$ python train.py`
+
 1. Input data are to be preprocessed, concatenated and saved as one big text file named `input.txt`
 in the sub folder of `data/` folder (e.g. see `data/tinyshakespeare`)
-2. run `python train.py` with argument `--data_dir` pointing to the data folder
-3. The model will be saved in the folder `--save_dir` specified, the best model, in terms of
+2. run `$ python train.py` with argument `--data_dir` pointing to the above data sub folder
+3. The model will be saved in the folder specified by `--save_dir`. The best model, in terms of
 minimum training loss so far, will be saved in the `best/`
-subfolder of the save_dir
+subfolder of the save folder.
 
-Detail command line arguments for running `train.py`:
+Detail command line arguments for running `python train.py`:
 
 ```
 $ python train.py -h
@@ -102,11 +92,13 @@ optional arguments:
 
 ## Sampling
 
+There are 2 sampling methods:
+* one-off sampling from command line
+* multiple sampling as a web service
+
 ### Command line:
 
-Main Command:
-
-`$ python sample.py`
+Main Command: `$ python sample.py`
 
 Detail command line arguments:
 ```
@@ -131,12 +123,12 @@ optional arguments:
 ```
 
 
-### Sampling using the CherryPy web server
+### Sampling using the CherryPy web service
 
-1. To run the web server: `python sample_server.py`
+1. To run the web service: `python sample_server.py`
 2. Visit [http://127.0.0.1:8080?prime=The&n=200&sample_mode=2](http://127.0.0.1:8080?prime=The&n=200&sample_mode=2) in the browser.
 
-Detail command line arguments to run the server:
+Detail command line arguments to run the service:
 ```
 $ python sample_server.py -h
 usage: sample_server.py [-h] [--port PORT] [--production]
@@ -154,7 +146,7 @@ optional arguments:
                        False)
 ```
 
-#### Web API parameters:
+#### Web service API parameters:
 
 * `prime`: initial text to prime the network
 * `n`: number of tokens to sample
@@ -167,6 +159,17 @@ optional arguments:
 NB: for both command-line and web-server sampling methods, pointing argument `SAVE_DIR` to
 the value of `SAVE_DIR` in the training step will use the **latest** model trained so far, to use the **best** model, point
 `SAVE_DIR` to `SAVE_DIR` + `'/best/'` from the training step.    
+
+
+### Improvements made in this repo:
+
+1. Allow word-level tokens, seperated by spaces (enable by using the argument flag `--word-level` when running train.py)
+1. Save the best model (in terms of minimum training loss) so far in the 'best' subfolder
+1. Options to use gensim word2vec embedding
+1. Add a web service for sampling (with CherryPy, see sample_sever.py)
+1. Temperature [Pull request #28](https://github.com/sherjilozair/char-rnn-tensorflow/pull/28)
+1. Dropouts [Pull request #35](https://github.com/sherjilozair/char-rnn-tensorflow/pull/35)
+
 
 
 #### License
