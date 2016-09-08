@@ -13,7 +13,7 @@ from model import Model
 from six import text_type
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--save_dir', type=str, default='save',
                        help='model directory to store checkpointed models')
     parser.add_argument('-n', type=int, default=500,
@@ -21,11 +21,11 @@ def main():
     parser.add_argument('--prime', type=text_type, default=u'The',
                        help='prime text')
     parser.add_argument('--sample', type=int, default=1,
-                       help='0 to use max at each timestep, 1 to sample at each timestep, 2 to sample on spaces')
+                       help='0 to use argmax at each timestep, 1 to sample at each timestep, 2 to sample on spaces')
     parser.add_argument('--temperature', type=float, default=1.,
                        help='temperature for sampling, within the range of (0,1]')
     parser.add_argument('--word_level', action='store_true',
-                        help='if specified, separate text on word level, otherwise, on char level')
+                        help='if specified, split text by space on word level, otherwise, spilt text on character level')
 
     args = parser.parse_args()
     sample(args)

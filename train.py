@@ -11,7 +11,7 @@ from utils import TextLoader
 from model import Model
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--data_dir', type=str, default='data/tinyshakespeare',
                        help='data directory containing input.txt')
     parser.add_argument('--save_dir', type=str, default='save',
@@ -51,7 +51,7 @@ def main():
     parser.add_argument('--print_every', type=int, default=10,
                         help='print stats of training every n steps')
     parser.add_argument('--word_level', action='store_true',
-                        help='if specified, separate text on word level, otherwise, on char level')
+                        help='if specified, split text by space on word level, otherwise, spilt text on character level')
     args = parser.parse_args()
     train(args)
 

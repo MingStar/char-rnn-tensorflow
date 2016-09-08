@@ -1,51 +1,179 @@
 # char-rnn-tensorflow
 
-# New changes in this repo:
+Multi-layer Recurrent Neural Networks (LSTM, RNN) for character-level and word-level language models in Python using Tensorflow.
 
-- Allow word-level tokens (with option flag `--word-level` when running train.py)
-- Save the best model (i.e. minimum training loss) so far in the 'best' subfolder
-- Options for using gensim word2vec embedding
-- Add a web server for sampling (with CherryPy, see sample_sever.py)
-- Temperature [Pull request #28](https://github.com/sherjilozair/char-rnn-tensorflow/pull/28)
-- Dropouts [Pull request #35](https://github.com/sherjilozair/char-rnn-tensorflow/pull/35)
+Originally written by [Sherjil Ozair](https://github.com/sherjilozair/char-rnn-tensorflow), inspired from Andrej Karpathy's [char-rnn](https://github.com/karpathy/char-rnn).
+
+### Improvements made in this repo:
+
+1. Allow word-level tokens, seperated by spaces (enable by using the argument flag `--word-level` when running train.py)
+1. Save the best model (in terms of minimum training loss) so far in the 'best' subfolder
+1. Options to use gensim word2vec embedding
+1. Add a web server for sampling (with CherryPy, see sample_sever.py)
+1. Temperature [Pull request #28](https://github.com/sherjilozair/char-rnn-tensorflow/pull/28)
+1. Dropouts [Pull request #35](https://github.com/sherjilozair/char-rnn-tensorflow/pull/35)
 
 
-## Requirements
+## Prerequisites:
+
+
 - [Tensorflow](http://www.tensorflow.org)
-- python libraries:
-    - [PyYAML](http://pyyaml.org/)
-    - [CherryPy](http://www.cherrypy.org/)
-    - [Gensim](https://radimrehurek.com/gensim/)
-    - [nltk](http://www.nltk.org/)
+- Other Python libraries:
+    - [Gensim](https://radimrehurek.com/gensim/) for optionally use a word2vec embedding
+    - [PyYAML](http://pyyaml.org/) for storing human readable model info
+    - [CherryPy](http://www.cherrypy.org/) for running a simple sampling server
 
-Installation for python libraries:
+#### PIP Installation for Python libraries:
 
 ```
-pip install pyyaml cherrypy nltk gensim
+pip install pyyaml cherrypy gensim
 ```
 
-## Sampling with the web server
+
+
+## Training
+
+1. Input data are to be preprocessed, concatenated and saved as one big text file named `input.txt`
+in the sub folder of `data/` folder (e.g. see `data/tinyshakespeare`)
+2. run `python train.py` with argument `--data_dir` pointing to the data folder
+3. The model will be saved in the folder `--save_dir` specified, the best model, in terms of
+minimum training loss so far, will be saved in the `best/`
+subfolder of the save_dir
+
+Detail command line arguments for running `train.py`:
+
 ```
-python sample_server.py --save_dir <your_checkpointed_model_directory>
+$ python train.py -h
+usage: train.py [-h] [--data_dir DATA_DIR] [--save_dir SAVE_DIR]
+                [--rnn_size RNN_SIZE] [--num_layers NUM_LAYERS]
+                [--model MODEL] [--batch_size BATCH_SIZE]
+                [--seq_length SEQ_LENGTH] [--num_epochs NUM_EPOCHS]
+                [--save_every SAVE_EVERY] [--grad_clip GRAD_CLIP]
+                [--learning_rate LEARNING_RATE] [--decay_rate DECAY_RATE]
+                [--init_from INIT_FROM]
+                [--word2vec_embedding WORD2VEC_EMBEDDING] [--dropout DROPOUT]
+                [--print_every PRINT_EVERY] [--word_level]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --data_dir DATA_DIR   data directory containing input.txt (default:
+                        data/tinyshakespeare)
+  --save_dir SAVE_DIR   directory to store checkpointed models (default: save)
+  --rnn_size RNN_SIZE   size of RNN hidden state (default: 128)
+  --num_layers NUM_LAYERS
+                        number of layers in the RNN (default: 3)
+  --model MODEL         rnn, gru, or lstm (default: lstm)
+  --batch_size BATCH_SIZE
+                        minibatch size (default: 50)
+  --seq_length SEQ_LENGTH
+                        RNN sequence length (default: 50)
+  --num_epochs NUM_EPOCHS
+                        number of epochs (default: 50)
+  --save_every SAVE_EVERY
+                        save frequency (default: 1000)
+  --grad_clip GRAD_CLIP
+                        clip gradients at this value (default: 5.0)
+  --learning_rate LEARNING_RATE
+                        learning rate (default: 0.002)
+  --decay_rate DECAY_RATE
+                        decay rate for rmsprop (default: 0.97)
+  --init_from INIT_FROM
+                        continue training from saved model at this path. Path
+                        must contain files saved by previous training process:
+                        'config.pkl' : configuration; 'chars_vocab.pkl' :
+                        vocabulary definitions; 'checkpoint' : paths to model
+                        file(s) (created by tf). Note: this file contains
+                        absolute paths, be careful when moving files around;
+                        'model.ckpt-*' : file(s) with model definition
+                        (created by tf) (default: None)
+  --word2vec_embedding WORD2VEC_EMBEDDING
+                        filename for the pre-train gensim word2vec model
+                        (default: None)
+  --dropout DROPOUT     probability of dropouts for each cell's output
+                        (default: 0)
+  --print_every PRINT_EVERY
+                        print stats of training every n steps (default: 10)
+  --word_level          if specified, split text by space on word level,
+                        otherwise, spilt text on character level (default:
+                        False)
 ```
 
-When the server is running, visit http://127.0.0.1:8080?prime=The&n=200&sample_mode=2 in the browser.
- 
 
-# Readme from the original/upstream repo:
 
-Multi-layer Recurrent Neural Networks (LSTM, RNN) for character-level language models in Python using Tensorflow.
+## Sampling
 
-Inspired from Andrej Karpathy's [char-rnn](https://github.com/karpathy/char-rnn).
+### Command line:
 
-# Requirements
-- [Tensorflow](http://www.tensorflow.org)
+Main Command:
 
-# Basic Usage
-To train with default parameters on the tinyshakespeare corpus, run `python train.py`.
+`$ python sample.py`
 
-To sample from a checkpointed model, `python sample.py`.
-# Roadmap
-- Add explanatory comments
-- Expose more command-line arguments
-- Compare accuracy and performance with char-rnn
+Detail command line arguments:
+```
+$ python sample.py -h
+usage: sample.py [-h] [--save_dir SAVE_DIR] [-n N] [--prime PRIME]
+                 [--sample SAMPLE] [--temperature TEMPERATURE] [--word_level]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --save_dir SAVE_DIR   model directory to store checkpointed models (default:
+                        save)
+  -n N                  number of characters to sample (default: 500)
+  --prime PRIME         prime text (default: The)
+  --sample SAMPLE       0 to use argmax at each timestep, 1 to sample at each
+                        timestep, 2 to sample on spaces (default: 1)
+  --temperature TEMPERATURE
+                        temperature for sampling, within the range of (0,1]
+                        (default: 1.0)
+  --word_level          if specified, split text by space on word level,
+                        otherwise, spilt text on character level (default:
+                        False)
+```
+
+
+### Sampling using the CherryPy web server
+
+1. To run the web server: `python sample_server.py`
+2. Visit [http://127.0.0.1:8080?prime=The&n=200&sample_mode=2](http://127.0.0.1:8080?prime=The&n=200&sample_mode=2) in the browser.
+
+Detail command line arguments to run the server:
+```
+$ python sample_server.py -h
+usage: sample_server.py [-h] [--port PORT] [--production]
+                        [--save_dir SAVE_DIR] [--word_level]
+
+optional arguments:
+  -h, --help           show this help message and exit
+  --port PORT          port the server runs on (default: 8080)
+  --production         specify whether the server runs in production
+                       environment or not (default: False)
+  --save_dir SAVE_DIR  directory to restore checkpointed models (default:
+                       save)
+  --word_level         if specified, split text by space on word level,
+                       otherwise, spilt text on character level (default:
+                       False)
+```
+
+#### Web API parameters:
+
+* `prime`: initial text to prime the network
+* `n`: number of tokens to sample
+* `sample_mode`:
+    * `0` to use argmax at each timestep
+    * `1` to sample at each timestep
+    * `2` to sample on spaces
+    
+    
+NB: for both command-line and web-server sampling methods, pointing argument `SAVE_DIR` to
+the value of `SAVE_DIR` in the training step will use the **latest** model trained so far, to use the **best** model, point
+`SAVE_DIR` to `SAVE_DIR` + `'/best/'` from the training step.    
+
+
+#### License
+
+The MIT License
+
+#### Contact
+
+For questions and usage issues, please contact mingstar215@gmail.com
+

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import threading
 import cherrypy
@@ -10,7 +11,7 @@ import tensorflow as tf
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--port', type=int, default='8080',
                        help='port the server runs on')
     parser.add_argument('--production', action="store_true",
@@ -18,7 +19,7 @@ def main():
     parser.add_argument('--save_dir', type=str, default='save',
                        help='directory to restore checkpointed models')
     parser.add_argument('--word_level', action='store_true',
-                        help='if specified, separate text on word level, otherwise, on char level')
+                        help='if specified, split text by space on word level, otherwise, spilt text on character level')
     args = parser.parse_args()
     server_config = {'server.socket_port': args.port}
     if args.production:
