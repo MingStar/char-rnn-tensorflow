@@ -1,6 +1,6 @@
 # char-rnn-tensorflow
 
-Multi-layer Recurrent Neural Networks (LSTM, RNN) for character-level and word-level language models in Python using Tensorflow.
+Multi-layer Recurrent Neural Networks (LSTM, GRU) for character-level and word-level language models in Python using Tensorflow.
 
 Originally [written by Sherjil Ozair](https://github.com/sherjilozair/char-rnn-tensorflow), which was inspired from Andrej Karpathy's [char-rnn](https://github.com/karpathy/char-rnn).
 
