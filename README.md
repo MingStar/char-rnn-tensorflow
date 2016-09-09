@@ -2,7 +2,7 @@
 
 Multi-layer Recurrent Neural Networks (LSTM, RNN) for character-level and word-level language models in Python using Tensorflow.
 
-Originally written by [Sherjil Ozair](https://github.com/sherjilozair/char-rnn-tensorflow), inspired from Andrej Karpathy's [char-rnn](https://github.com/karpathy/char-rnn).
+Originally [written by Sherjil Ozair](https://github.com/sherjilozair/char-rnn-tensorflow), which was inspired from Andrej Karpathy's [char-rnn](https://github.com/karpathy/char-rnn).
 
 ## Prerequisites:
 
@@ -163,7 +163,7 @@ the value of `SAVE_DIR` in the training step will use the **latest** model train
 
 ### Improvements made in this repo:
 
-1. Allow word-level tokens, seperated by spaces (enable by using the argument flag `--word-level` when running train.py)
+1. Allow word-level tokens, separated by spaces (enable by using the argument flag `--word-level` when running train.py)
 1. Save the best model (in terms of minimum training loss) so far in the 'best' subfolder
 1. Options to use gensim word2vec embedding
 1. Add a web service for sampling (with CherryPy, see sample_sever.py)
