@@ -161,7 +161,7 @@ the value of `SAVE_DIR` in the training step will use the **latest** model train
 `SAVE_DIR` to `SAVE_DIR` + `'/best/'` from the training step.    
 
 
-### Improvements made in this repo:
+## Improvements made in this repo:
 
 1. Allow word-level tokens, separated by spaces (enable by using the argument flag `--word-level` when running train.py)
 1. Save the best model (in terms of minimum training loss) so far in the 'best' subfolder
